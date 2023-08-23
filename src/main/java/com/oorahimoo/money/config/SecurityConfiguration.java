@@ -82,7 +82,8 @@ public class SecurityConfiguration {
                     .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
                     .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
             )
-            .oauth2ResourceServer(oauth2 -> oauth2.jwt());
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt())
+            .requiresChannel(channel -> channel.requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null).requiresSecure());
         return http.build();
     }
 }

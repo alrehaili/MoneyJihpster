@@ -1,0 +1,20 @@
+entity Beneficiary{
+    BeneficiaryIdent UUID unique
+    Name String
+    CurrentBalance Double
+}
+
+entity Transaction {
+    TransactionIdent UUID unique
+    Type String
+    How String
+    Reason String
+    Note String
+    Amount Double
+}
+
+
+relationship OneToMany {
+    Beneficiary to Transaction ,
+
+}

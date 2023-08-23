@@ -48,6 +48,9 @@ public class CacheConfiguration {
             createCache(cm, com.oorahimoo.money.domain.User.class.getName());
             createCache(cm, com.oorahimoo.money.domain.Authority.class.getName());
             createCache(cm, com.oorahimoo.money.domain.User.class.getName() + ".authorities");
+            createCache(cm, com.oorahimoo.money.domain.Beneficiary.class.getName());
+            createCache(cm, com.oorahimoo.money.domain.Beneficiary.class.getName() + ".transactions");
+            createCache(cm, com.oorahimoo.money.domain.Transaction.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }
