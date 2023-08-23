@@ -1,0 +1,71 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-beneficiary-heading" data-cy="BeneficiaryCreateUpdateHeading" jhiTranslate="moneyApp.beneficiary.home.createOrEditLabel">
+        Create or edit a Beneficiary
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="moneyApp.beneficiary.beneficiaryIdent" for="field_beneficiaryIdent"
+            >Beneficiary Ident</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="beneficiaryIdent"
+            id="field_beneficiaryIdent"
+            data-cy="beneficiaryIdent"
+            formControlName="beneficiaryIdent"
+          />
+          <div
+            *ngIf="
+              editForm.get('beneficiaryIdent')!.invalid &&
+              (editForm.get('beneficiaryIdent')!.dirty || editForm.get('beneficiaryIdent')!.touched)
+            "
+          ></div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="moneyApp.beneficiary.name" for="field_name">Name</label>
+          <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="moneyApp.beneficiary.currentBalance" for="field_currentBalance">Current Balance</label>
+          <input
+            type="number"
+            class="form-control"
+            name="currentBalance"
+            id="field_currentBalance"
+            data-cy="currentBalance"
+            formControlName="currentBalance"
+          />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

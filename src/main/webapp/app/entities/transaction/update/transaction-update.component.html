@@ -1,0 +1,96 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-transaction-heading" data-cy="TransactionCreateUpdateHeading" jhiTranslate="moneyApp.transaction.home.createOrEditLabel">
+        Create or edit a Transaction
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="moneyApp.transaction.transactionIdent" for="field_transactionIdent"
+            >Transaction Ident</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="transactionIdent"
+            id="field_transactionIdent"
+            data-cy="transactionIdent"
+            formControlName="transactionIdent"
+          />
+          <div
+            *ngIf="
+              editForm.get('transactionIdent')!.invalid &&
+              (editForm.get('transactionIdent')!.dirty || editForm.get('transactionIdent')!.touched)
+            "
+          ></div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="moneyApp.transaction.type" for="field_type">Type</label>
+          <input type="text" class="form-control" name="type" id="field_type" data-cy="type" formControlName="type" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="moneyApp.transaction.how" for="field_how">How</label>
+          <input type="text" class="form-control" name="how" id="field_how" data-cy="how" formControlName="how" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="moneyApp.transaction.reason" for="field_reason">Reason</label>
+          <input type="text" class="form-control" name="reason" id="field_reason" data-cy="reason" formControlName="reason" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="moneyApp.transaction.note" for="field_note">Note</label>
+          <input type="text" class="form-control" name="note" id="field_note" data-cy="note" formControlName="note" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="moneyApp.transaction.amount" for="field_amount">Amount</label>
+          <input type="number" class="form-control" name="amount" id="field_amount" data-cy="amount" formControlName="amount" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="moneyApp.transaction.beneficiary" for="field_beneficiary">Beneficiary</label>
+          <select
+            class="form-control"
+            id="field_beneficiary"
+            data-cy="beneficiary"
+            name="beneficiary"
+            formControlName="beneficiary"
+            [compareWith]="compareBeneficiary"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="beneficiaryOption" *ngFor="let beneficiaryOption of beneficiariesSharedCollection">
+              {{ beneficiaryOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

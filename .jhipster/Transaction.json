@@ -1,0 +1,43 @@
+{
+  "applications": "*",
+  "changelogDate": "20230821183447",
+  "entityTableName": "transaction",
+  "fields": [
+    {
+      "fieldName": "transactionIdent",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "how",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "reason",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "note",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "amount",
+      "fieldType": "Double"
+    }
+  ],
+  "name": "Transaction",
+  "relationships": [
+    {
+      "otherEntityName": "beneficiary",
+      "otherEntityRelationshipName": "transaction",
+      "relationshipName": "beneficiary",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no"
+}

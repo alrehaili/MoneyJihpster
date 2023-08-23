@@ -1,0 +1,58 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="transaction">
+      <h2 data-cy="transactionDetailsHeading"><span jhiTranslate="moneyApp.transaction.detail.title">Transaction</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ transaction.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyApp.transaction.transactionIdent">Transaction Ident</span></dt>
+        <dd>
+          <span>{{ transaction.transactionIdent }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyApp.transaction.type">Type</span></dt>
+        <dd>
+          <span>{{ transaction.type }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyApp.transaction.how">How</span></dt>
+        <dd>
+          <span>{{ transaction.how }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyApp.transaction.reason">Reason</span></dt>
+        <dd>
+          <span>{{ transaction.reason }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyApp.transaction.note">Note</span></dt>
+        <dd>
+          <span>{{ transaction.note }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyApp.transaction.amount">Amount</span></dt>
+        <dd>
+          <span>{{ transaction.amount }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyApp.transaction.beneficiary">Beneficiary</span></dt>
+        <dd>
+          <div *ngIf="transaction.beneficiary">
+            <a [routerLink]="['/beneficiary', transaction.beneficiary.id, 'view']">{{ transaction.beneficiary.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/transaction', transaction.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+{
+  "applications": "*",
+  "changelogDate": "20230821183446",
+  "entityTableName": "beneficiary",
+  "fields": [
+    {
+      "fieldName": "beneficiaryIdent",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "currentBalance",
+      "fieldType": "Double"
+    }
+  ],
+  "name": "Beneficiary",
+  "relationships": [
+    {
+      "otherEntityName": "transaction",
+      "otherEntityRelationshipName": "beneficiary",
+      "relationshipName": "transaction",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no"
+}
