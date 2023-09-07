@@ -1,14 +1,10 @@
 package com.oorahimoo.money.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -17,7 +13,7 @@ import org.hibernate.type.SqlTypes;
  */
 @Entity
 @Table(name = "beneficiary")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Beneficiary implements Serializable {
 
@@ -30,23 +26,26 @@ public class Beneficiary implements Serializable {
 
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(name = "beneficiary_ident", length = 36, unique = true)
-    private UUID beneficiaryIdent;
+    private String beneficiaryIdent;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "current_balance")
+    @Transient
+    @JsonProperty
     private Double currentBalance;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "beneficiary")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "beneficiary" }, allowSetters = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "beneficiary")
+    //    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    //   @JsonIgnoreProperties(value = {"beneficiary"}, allowSetters = true)
     private Set<Transaction> transactions = new HashSet<>();
-
-    // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
         return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Beneficiary id(Long id) {
@@ -54,20 +53,16 @@ public class Beneficiary implements Serializable {
         return this;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public UUID getBeneficiaryIdent() {
-        return this.beneficiaryIdent;
-    }
-
-    public Beneficiary beneficiaryIdent(UUID beneficiaryIdent) {
+    public Beneficiary beneficiaryIdent(String beneficiaryIdent) {
         this.setBeneficiaryIdent(beneficiaryIdent);
         return this;
     }
 
-    public void setBeneficiaryIdent(UUID beneficiaryIdent) {
+    public String getBeneficiaryIdent() {
+        return beneficiaryIdent;
+    }
+
+    public void setBeneficiaryIdent(String beneficiaryIdent) {
         this.beneficiaryIdent = beneficiaryIdent;
     }
 
@@ -75,26 +70,26 @@ public class Beneficiary implements Serializable {
         return this.name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Beneficiary name(String name) {
         this.setName(name);
         return this;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Double getCurrentBalance() {
         return this.currentBalance;
     }
 
+    public void setCurrentBalance(Double currentBalance) {
+        this.currentBalance = currentBalance;
+    }
+
     public Beneficiary currentBalance(Double currentBalance) {
         this.setCurrentBalance(currentBalance);
         return this;
-    }
-
-    public void setCurrentBalance(Double currentBalance) {
-        this.currentBalance = currentBalance;
     }
 
     public Set<Transaction> getTransactions() {
@@ -139,6 +134,14 @@ public class Beneficiary implements Serializable {
             return false;
         }
         return id != null && id.equals(((Beneficiary) o).id);
+    }
+
+    public void calculateCurrentBalance() {
+        Double temp = 0.00;
+        if (this.getTransactions() != null) for (Transaction transaction : this.getTransactions()) {
+            temp += transaction.getAmount();
+        }
+        this.setCurrentBalance(temp);
     }
 
     @Override

@@ -1,10 +1,8 @@
 package com.oorahimoo.money.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import java.io.Serializable;
-import java.util.UUID;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -28,7 +26,7 @@ public class Transaction implements Serializable {
 
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(name = "transaction_ident", length = 36, unique = true)
-    private UUID transactionIdent;
+    private String transactionIdent;
 
     @Column(name = "type")
     private String type;
@@ -45,11 +43,10 @@ public class Transaction implements Serializable {
     @Column(name = "amount")
     private Double amount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "transactions" }, allowSetters = true)
+    @ManyToOne(fetch = FetchType.EAGER)
+    //    @JsonIgnoreProperties(value = { "transactions" }, allowSetters = true)
+    @JsonIncludeProperties({ "id", "name" })
     private Beneficiary beneficiary;
-
-    // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
         return this.id;
@@ -64,16 +61,11 @@ public class Transaction implements Serializable {
         this.id = id;
     }
 
-    public UUID getTransactionIdent() {
-        return this.transactionIdent;
+    public String getTransactionIdent() {
+        return transactionIdent;
     }
 
-    public Transaction transactionIdent(UUID transactionIdent) {
-        this.setTransactionIdent(transactionIdent);
-        return this;
-    }
-
-    public void setTransactionIdent(UUID transactionIdent) {
+    public void setTransactionIdent(String transactionIdent) {
         this.transactionIdent = transactionIdent;
     }
 

@@ -8,7 +8,7 @@ export interface ITransaction {
   reason?: string | null;
   note?: string | null;
   amount?: number | null;
-  beneficiary?: Pick<IBeneficiary, 'id'> | null;
+  beneficiary?: IBeneficiary | null;
 }
 
 export type NewTransaction = Omit<ITransaction, 'id'> & { id: null };

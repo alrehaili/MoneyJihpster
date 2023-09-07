@@ -38,12 +38,12 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="transactionIdent">
-            <div class="d-flex">
-              <span jhiTranslate="moneyApp.transaction.transactionIdent">Transaction Ident</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
+          <!--          <th scope="col" jhiSortBy="transactionIdent">-->
+          <!--            <div class="d-flex">-->
+          <!--              <span jhiTranslate="moneyApp.transaction.transactionIdent">Transaction Ident</span>-->
+          <!--              <fa-icon class="p-1" icon="sort"></fa-icon>-->
+          <!--            </div>-->
+          <!--          </th>-->
           <th scope="col" jhiSortBy="type">
             <div class="d-flex">
               <span jhiTranslate="moneyApp.transaction.type">Type</span>
@@ -88,7 +88,7 @@
           <td>
             <a [routerLink]="['/transaction', transaction.id, 'view']">{{ transaction.id }}</a>
           </td>
-          <td>{{ transaction.transactionIdent }}</td>
+          <!--          <td>{{ transaction.transactionIdent }}</td>-->
           <td>{{ transaction.type }}</td>
           <td>{{ transaction.how }}</td>
           <td>{{ transaction.reason }}</td>
@@ -96,7 +96,7 @@
           <td>{{ transaction.amount }}</td>
           <td>
             <div *ngIf="transaction.beneficiary">
-              <a [routerLink]="['/beneficiary', transaction.beneficiary.id, 'view']">{{ transaction.beneficiary.id }}</a>
+              <a [routerLink]="['/beneficiary', transaction.beneficiary.id, 'view']">{{ transaction.beneficiary.name }}</a>
             </div>
           </td>
           <td class="text-end">

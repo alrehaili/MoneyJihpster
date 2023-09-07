@@ -28,6 +28,8 @@ public class JacksonConfiguration {
      */
     @Bean
     public Hibernate6Module hibernate6Module() {
-        return new Hibernate6Module();
+        Hibernate6Module hm = new Hibernate6Module();
+        hm.disable(Hibernate6Module.Feature.USE_TRANSIENT_ANNOTATION);
+        return hm;
     }
 }
