@@ -17,7 +17,7 @@
     "dtoSuffix": "DTO",
     "enableGradleEnterprise": false,
     "enableHibernateCache": true,
-    "enableSwaggerCodegen": false,
+    "enableSwaggerCodegen": true,
     "enableTranslation": true,
     "entities": ["Beneficiary", "Transaction"],
     "entitySuffix": "",

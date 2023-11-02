@@ -15,7 +15,7 @@ import org.hibernate.type.SqlTypes;
 @Table(name = "beneficiary")
 //@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Beneficiary implements Serializable {
+public class Beneficiary extends AbstractAuditingEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
