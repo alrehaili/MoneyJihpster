@@ -1,3 +1,4 @@
+import dayjs from 'dayjs/esm';
 import { IBeneficiary } from 'app/entities/beneficiary/beneficiary.model';
 
 export interface ITransaction {
@@ -8,7 +9,8 @@ export interface ITransaction {
   reason?: string | null;
   note?: string | null;
   amount?: number | null;
-  beneficiary?: IBeneficiary | null;
+  transactionDate?: dayjs.Dayjs | null;
+  beneficiary?: Pick<IBeneficiary, 'id'> | null;
 }
 
 export type NewTransaction = Omit<ITransaction, 'id'> & { id: null };

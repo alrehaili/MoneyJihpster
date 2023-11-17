@@ -27,6 +27,10 @@
     {
       "fieldName": "amount",
       "fieldType": "Double"
+    },
+    {
+      "fieldName": "transactionDate",
+      "fieldType": "ZonedDateTime"
     }
   ],
   "name": "Transaction",

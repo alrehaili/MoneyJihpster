@@ -10,7 +10,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,8 +53,6 @@ public class TransactionResource {
         if (transaction.getId() != null) {
             throw new BadRequestAlertException("A new transaction cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        transaction.setTransactionIdent(UUID.randomUUID().toString());
-        transaction.setBeneficiary(transaction.getBeneficiary());
         Transaction result = transactionRepository.save(transaction);
         return ResponseEntity
             .created(new URI("/api/transactions/" + result.getId()))
@@ -89,12 +86,6 @@ public class TransactionResource {
         if (!transactionRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
-        if (transaction.getBeneficiary().getId() == null) {
-            System.out.println("Errrrorrrr no bene");
-        } else System.out.println("Bene \n" + transaction.getBeneficiary().toString());
-        System.out.println("Transaction \n" + transaction.toString());
-        transaction.setBeneficiary(transaction.getBeneficiary());
-        System.out.println("Tra2 \n" + transaction.toString());
 
         Transaction result = transactionRepository.save(transaction);
         return ResponseEntity
@@ -151,6 +142,9 @@ public class TransactionResource {
                 }
                 if (transaction.getAmount() != null) {
                     existingTransaction.setAmount(transaction.getAmount());
+                }
+                if (transaction.getTransactionDate() != null) {
+                    existingTransaction.setTransactionDate(transaction.getTransactionDate());
                 }
 
                 return existingTransaction;

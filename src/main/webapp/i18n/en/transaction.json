@@ -24,6 +24,7 @@
       "reason": "Reason",
       "note": "Note",
       "amount": "Amount",
+      "transactionDate": "Transaction Date",
       "beneficiary": "Beneficiary"
     }
   }

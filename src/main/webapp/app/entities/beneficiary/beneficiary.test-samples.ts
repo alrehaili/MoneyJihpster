@@ -18,7 +18,6 @@ export const sampleWithFullData: IBeneficiary = {
 
 export const sampleWithNewData: NewBeneficiary = {
   id: null,
-  name: null,
 };
 
 Object.freeze(sampleWithNewData);

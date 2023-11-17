@@ -10,7 +10,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,7 +53,6 @@ public class BeneficiaryResource {
         if (beneficiary.getId() != null) {
             throw new BadRequestAlertException("A new beneficiary cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        beneficiary.setBeneficiaryIdent(UUID.randomUUID().toString());
         Beneficiary result = beneficiaryRepository.save(beneficiary);
         return ResponseEntity
             .created(new URI("/api/beneficiaries/" + result.getId()))
@@ -155,9 +153,7 @@ public class BeneficiaryResource {
     @GetMapping("/beneficiaries")
     public List<Beneficiary> getAllBeneficiaries() {
         log.debug("REST request to get all Beneficiaries");
-        List<Beneficiary> beneficiaryList = beneficiaryRepository.findAll();
-        beneficiaryList.forEach(beneficiary -> beneficiary.calculateCurrentBalance());
-        return beneficiaryList;
+        return beneficiaryRepository.findAll();
     }
 
     /**
@@ -170,7 +166,6 @@ public class BeneficiaryResource {
     public ResponseEntity<Beneficiary> getBeneficiary(@PathVariable Long id) {
         log.debug("REST request to get Beneficiary : {}", id);
         Optional<Beneficiary> beneficiary = beneficiaryRepository.findById(id);
-        beneficiary.ifPresent(Beneficiary::calculateCurrentBalance);
         return ResponseUtil.wrapOrNotFound(beneficiary);
     }
 

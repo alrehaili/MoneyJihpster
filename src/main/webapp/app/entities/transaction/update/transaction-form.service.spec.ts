@@ -26,6 +26,7 @@ describe('Transaction Form Service', () => {
             reason: expect.any(Object),
             note: expect.any(Object),
             amount: expect.any(Object),
+            transactionDate: expect.any(Object),
             beneficiary: expect.any(Object),
           })
         );
@@ -43,6 +44,7 @@ describe('Transaction Form Service', () => {
             reason: expect.any(Object),
             note: expect.any(Object),
             amount: expect.any(Object),
+            transactionDate: expect.any(Object),
             beneficiary: expect.any(Object),
           })
         );

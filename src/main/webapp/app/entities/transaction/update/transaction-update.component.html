@@ -59,6 +59,21 @@
         </div>
 
         <div class="mb-3">
+          <label class="form-label" jhiTranslate="moneyApp.transaction.transactionDate" for="field_transactionDate">Transaction Date</label>
+          <div class="d-flex">
+            <input
+              id="field_transactionDate"
+              data-cy="transactionDate"
+              type="datetime-local"
+              class="form-control"
+              name="transactionDate"
+              formControlName="transactionDate"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
           <label class="form-label" jhiTranslate="moneyApp.transaction.beneficiary" for="field_beneficiary">Beneficiary</label>
           <select
             class="form-control"
@@ -70,7 +85,7 @@
           >
             <option [ngValue]="null"></option>
             <option [ngValue]="beneficiaryOption" *ngFor="let beneficiaryOption of beneficiariesSharedCollection">
-              {{ beneficiaryOption.name }}
+              {{ beneficiaryOption.id }}
             </option>
           </select>
         </div>

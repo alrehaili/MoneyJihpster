@@ -1,25 +1,28 @@
+import dayjs from 'dayjs/esm';
+
 import { ITransaction, NewTransaction } from './transaction.model';
 
 export const sampleWithRequiredData: ITransaction = {
-  id: 7779,
+  id: 12618,
 };
 
 export const sampleWithPartialData: ITransaction = {
-  id: 14834,
-  transactionIdent: '6919dde5-f18d-4b99-8629-c0a765c16cae',
-  how: 'enhance broadside',
-  reason: 'Soul male payment',
-  note: 'vice empower',
+  id: 11397,
+  transactionIdent: 'c16cae26-43f1-4a98-8b86-a6ff44385921',
+  reason: 'Buckinghamshire budgetary',
+  amount: 30190,
+  transactionDate: dayjs('2023-08-20T23:54'),
 };
 
 export const sampleWithFullData: ITransaction = {
-  id: 7687,
-  transactionIdent: '85921350-b524-4ec8-98d3-9e3429ddf946',
-  type: 'Xenon',
-  how: 'cohesive female',
-  reason: 'similique',
-  note: 'Investor Cab trustworthy',
-  amount: 17488,
+  id: 18161,
+  transactionIdent: '8d39e342-9ddf-4946-b54b-7753b329adaa',
+  type: 'vero',
+  how: 'bypass Shoes Avon',
+  reason: 'Cab',
+  note: 'Van',
+  amount: 668,
+  transactionDate: dayjs('2023-08-21T03:12'),
 };
 
 export const sampleWithNewData: NewTransaction = {

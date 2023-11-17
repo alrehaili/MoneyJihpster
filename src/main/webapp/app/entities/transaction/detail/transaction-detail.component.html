@@ -38,10 +38,14 @@
         <dd>
           <span>{{ transaction.amount }}</span>
         </dd>
+        <dt><span jhiTranslate="moneyApp.transaction.transactionDate">Transaction Date</span></dt>
+        <dd>
+          <span>{{ transaction.transactionDate | formatMediumDatetime }}</span>
+        </dd>
         <dt><span jhiTranslate="moneyApp.transaction.beneficiary">Beneficiary</span></dt>
         <dd>
           <div *ngIf="transaction.beneficiary">
-            <a [routerLink]="['/beneficiary', transaction.beneficiary.id, 'view']">{{ transaction.beneficiary.name }}</a>
+            <a [routerLink]="['/beneficiary', transaction.beneficiary.id, 'view']">{{ transaction.beneficiary.id }}</a>
           </div>
         </dd>
       </dl>

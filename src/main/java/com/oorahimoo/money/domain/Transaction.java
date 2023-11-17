@@ -1,8 +1,11 @@
 package com.oorahimoo.money.domain;
 
-import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
+import java.util.UUID;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -15,7 +18,7 @@ import org.hibernate.type.SqlTypes;
 @Table(name = "transaction")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Transaction extends AbstractAuditingEntity<Long> implements Serializable {
+public class Transaction implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -26,7 +29,7 @@ public class Transaction extends AbstractAuditingEntity<Long> implements Seriali
 
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(name = "transaction_ident", length = 36, unique = true)
-    private String transactionIdent;
+    private UUID transactionIdent;
 
     @Column(name = "type")
     private String type;
@@ -43,10 +46,14 @@ public class Transaction extends AbstractAuditingEntity<Long> implements Seriali
     @Column(name = "amount")
     private Double amount;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    //    @JsonIgnoreProperties(value = { "transactions" }, allowSetters = true)
-    @JsonIncludeProperties({ "id", "name" })
+    @Column(name = "transaction_date")
+    private ZonedDateTime transactionDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "transactions" }, allowSetters = true)
     private Beneficiary beneficiary;
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
         return this.id;
@@ -61,11 +68,16 @@ public class Transaction extends AbstractAuditingEntity<Long> implements Seriali
         this.id = id;
     }
 
-    public String getTransactionIdent() {
-        return transactionIdent;
+    public UUID getTransactionIdent() {
+        return this.transactionIdent;
     }
 
-    public void setTransactionIdent(String transactionIdent) {
+    public Transaction transactionIdent(UUID transactionIdent) {
+        this.setTransactionIdent(transactionIdent);
+        return this;
+    }
+
+    public void setTransactionIdent(UUID transactionIdent) {
         this.transactionIdent = transactionIdent;
     }
 
@@ -134,6 +146,19 @@ public class Transaction extends AbstractAuditingEntity<Long> implements Seriali
         this.amount = amount;
     }
 
+    public ZonedDateTime getTransactionDate() {
+        return this.transactionDate;
+    }
+
+    public Transaction transactionDate(ZonedDateTime transactionDate) {
+        this.setTransactionDate(transactionDate);
+        return this;
+    }
+
+    public void setTransactionDate(ZonedDateTime transactionDate) {
+        this.transactionDate = transactionDate;
+    }
+
     public Beneficiary getBeneficiary() {
         return this.beneficiary;
     }
@@ -177,6 +202,7 @@ public class Transaction extends AbstractAuditingEntity<Long> implements Seriali
             ", reason='" + getReason() + "'" +
             ", note='" + getNote() + "'" +
             ", amount=" + getAmount() +
+            ", transactionDate='" + getTransactionDate() + "'" +
             "}";
     }
 }

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
+import dayjs from 'dayjs/esm';
+import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 import { ITransaction, NewTransaction } from '../transaction.model';
 
 /**
@@ -14,17 +16,29 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type TransactionFormGroupInput = ITransaction | PartialWithRequiredKeyOf<NewTransaction>;
 
-type TransactionFormDefaults = Pick<NewTransaction, 'id'>;
+/**
+ * Type that converts some properties for forms.
+ */
+type FormValueOf<T extends ITransaction | NewTransaction> = Omit<T, 'transactionDate'> & {
+  transactionDate?: string | null;
+};
+
+type TransactionFormRawValue = FormValueOf<ITransaction>;
+
+type NewTransactionFormRawValue = FormValueOf<NewTransaction>;
+
+type TransactionFormDefaults = Pick<NewTransaction, 'id' | 'transactionDate'>;
 
 type TransactionFormGroupContent = {
-  id: FormControl<ITransaction['id'] | NewTransaction['id']>;
-  transactionIdent: FormControl<ITransaction['transactionIdent']>;
-  type: FormControl<ITransaction['type']>;
-  how: FormControl<ITransaction['how']>;
-  reason: FormControl<ITransaction['reason']>;
-  note: FormControl<ITransaction['note']>;
-  amount: FormControl<ITransaction['amount']>;
-  beneficiary: FormControl<ITransaction['beneficiary']>;
+  id: FormControl<TransactionFormRawValue['id'] | NewTransaction['id']>;
+  transactionIdent: FormControl<TransactionFormRawValue['transactionIdent']>;
+  type: FormControl<TransactionFormRawValue['type']>;
+  how: FormControl<TransactionFormRawValue['how']>;
+  reason: FormControl<TransactionFormRawValue['reason']>;
+  note: FormControl<TransactionFormRawValue['note']>;
+  amount: FormControl<TransactionFormRawValue['amount']>;
+  transactionDate: FormControl<TransactionFormRawValue['transactionDate']>;
+  beneficiary: FormControl<TransactionFormRawValue['beneficiary']>;
 };
 
 export type TransactionFormGroup = FormGroup<TransactionFormGroupContent>;
@@ -32,10 +46,10 @@ export type TransactionFormGroup = FormGroup<TransactionFormGroupContent>;
 @Injectable({ providedIn: 'root' })
 export class TransactionFormService {
   createTransactionFormGroup(transaction: TransactionFormGroupInput = { id: null }): TransactionFormGroup {
-    const transactionRawValue = {
+    const transactionRawValue = this.convertTransactionToTransactionRawValue({
       ...this.getFormDefaults(),
       ...transaction,
-    };
+    });
     return new FormGroup<TransactionFormGroupContent>({
       id: new FormControl(
         { value: transactionRawValue.id, disabled: true },
@@ -50,16 +64,17 @@ export class TransactionFormService {
       reason: new FormControl(transactionRawValue.reason),
       note: new FormControl(transactionRawValue.note),
       amount: new FormControl(transactionRawValue.amount),
+      transactionDate: new FormControl(transactionRawValue.transactionDate),
       beneficiary: new FormControl(transactionRawValue.beneficiary),
     });
   }
 
   getTransaction(form: TransactionFormGroup): ITransaction | NewTransaction {
-    return form.getRawValue() as ITransaction | NewTransaction;
+    return this.convertTransactionRawValueToTransaction(form.getRawValue() as TransactionFormRawValue | NewTransactionFormRawValue);
   }
 
   resetForm(form: TransactionFormGroup, transaction: TransactionFormGroupInput): void {
-    const transactionRawValue = { ...this.getFormDefaults(), ...transaction };
+    const transactionRawValue = this.convertTransactionToTransactionRawValue({ ...this.getFormDefaults(), ...transaction });
     form.reset(
       {
         ...transactionRawValue,
@@ -69,8 +84,29 @@ export class TransactionFormService {
   }
 
   private getFormDefaults(): TransactionFormDefaults {
+    const currentTime = dayjs();
+
     return {
       id: null,
+      transactionDate: currentTime,
+    };
+  }
+
+  private convertTransactionRawValueToTransaction(
+    rawTransaction: TransactionFormRawValue | NewTransactionFormRawValue
+  ): ITransaction | NewTransaction {
+    return {
+      ...rawTransaction,
+      transactionDate: dayjs(rawTransaction.transactionDate, DATE_TIME_FORMAT),
+    };
+  }
+
+  private convertTransactionToTransactionRawValue(
+    transaction: ITransaction | (Partial<NewTransaction> & TransactionFormDefaults)
+  ): TransactionFormRawValue | PartialWithRequiredKeyOf<NewTransactionFormRawValue> {
+    return {
+      ...transaction,
+      transactionDate: transaction.transactionDate ? transaction.transactionDate.format(DATE_TIME_FORMAT) : undefined,
     };
   }
 }

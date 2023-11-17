@@ -4,10 +4,11 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { ITransaction } from '../transaction.model';
 import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../transaction.test-samples';
 
-import { TransactionService } from './transaction.service';
+import { TransactionService, RestTransaction } from './transaction.service';
 
-const requireRestSample: ITransaction = {
+const requireRestSample: RestTransaction = {
   ...sampleWithRequiredData,
+  transactionDate: sampleWithRequiredData.transactionDate?.toJSON(),
 };
 
 describe('Transaction Service', () => {

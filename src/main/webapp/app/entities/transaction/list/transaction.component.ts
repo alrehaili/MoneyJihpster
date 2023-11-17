@@ -12,7 +12,6 @@ import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/conf
 import { EntityArrayResponseType, TransactionService } from '../service/transaction.service';
 import { TransactionDeleteDialogComponent } from '../delete/transaction-delete-dialog.component';
 import { SortService } from 'app/shared/sort/sort.service';
-import { NgIf } from '@angular/common';
 
 @Component({
   standalone: true,
@@ -27,7 +26,6 @@ import { NgIf } from '@angular/common';
     DurationPipe,
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
-    NgIf,
   ],
 })
 export class TransactionComponent implements OnInit {

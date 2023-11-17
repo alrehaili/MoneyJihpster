@@ -2,12 +2,26 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+import { map } from 'rxjs/operators';
+
+import dayjs from 'dayjs/esm';
+
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { ITransaction, NewTransaction } from '../transaction.model';
 
 export type PartialUpdateTransaction = Partial<ITransaction> & Pick<ITransaction, 'id'>;
+
+type RestOf<T extends ITransaction | NewTransaction> = Omit<T, 'transactionDate'> & {
+  transactionDate?: string | null;
+};
+
+export type RestTransaction = RestOf<ITransaction>;
+
+export type NewRestTransaction = RestOf<NewTransaction>;
+
+export type PartialUpdateRestTransaction = RestOf<PartialUpdateTransaction>;
 
 export type EntityResponseType = HttpResponse<ITransaction>;
 export type EntityArrayResponseType = HttpResponse<ITransaction[]>;
@@ -19,28 +33,37 @@ export class TransactionService {
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
   create(transaction: NewTransaction): Observable<EntityResponseType> {
-    return this.http.post<ITransaction>(this.resourceUrl, transaction, { observe: 'response' });
+    const copy = this.convertDateFromClient(transaction);
+    return this.http
+      .post<RestTransaction>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   update(transaction: ITransaction): Observable<EntityResponseType> {
-    return this.http.put<ITransaction>(`${this.resourceUrl}/${this.getTransactionIdentifier(transaction)}`, transaction, {
-      observe: 'response',
-    });
+    const copy = this.convertDateFromClient(transaction);
+    return this.http
+      .put<RestTransaction>(`${this.resourceUrl}/${this.getTransactionIdentifier(transaction)}`, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   partialUpdate(transaction: PartialUpdateTransaction): Observable<EntityResponseType> {
-    return this.http.patch<ITransaction>(`${this.resourceUrl}/${this.getTransactionIdentifier(transaction)}`, transaction, {
-      observe: 'response',
-    });
+    const copy = this.convertDateFromClient(transaction);
+    return this.http
+      .patch<RestTransaction>(`${this.resourceUrl}/${this.getTransactionIdentifier(transaction)}`, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
-    return this.http.get<ITransaction>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+    return this.http
+      .get<RestTransaction>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<ITransaction[]>(this.resourceUrl, { params: options, observe: 'response' });
+    return this.http
+      .get<RestTransaction[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -75,5 +98,31 @@ export class TransactionService {
       return [...transactionsToAdd, ...transactionCollection];
     }
     return transactionCollection;
+  }
+
+  protected convertDateFromClient<T extends ITransaction | NewTransaction | PartialUpdateTransaction>(transaction: T): RestOf<T> {
+    return {
+      ...transaction,
+      transactionDate: transaction.transactionDate?.toJSON() ?? null,
+    };
+  }
+
+  protected convertDateFromServer(restTransaction: RestTransaction): ITransaction {
+    return {
+      ...restTransaction,
+      transactionDate: restTransaction.transactionDate ? dayjs(restTransaction.transactionDate) : undefined,
+    };
+  }
+
+  protected convertResponseFromServer(res: HttpResponse<RestTransaction>): HttpResponse<ITransaction> {
+    return res.clone({
+      body: res.body ? this.convertDateFromServer(res.body) : null,
+    });
+  }
+
+  protected convertResponseArrayFromServer(res: HttpResponse<RestTransaction[]>): HttpResponse<ITransaction[]> {
+    return res.clone({
+      body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
+    });
   }
 }

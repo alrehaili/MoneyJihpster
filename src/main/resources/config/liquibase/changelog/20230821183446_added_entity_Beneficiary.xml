@@ -14,7 +14,7 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="beneficiary_ident" type="java.util.UUID">
+            <column name="beneficiary_ident" type="${uuidType}">
                 <constraints nullable="true" unique="true" uniqueConstraintName="ux_beneficiary__beneficiary_ident" />
             </column>
             <column name="name" type="varchar(255)">
